@@ -1,0 +1,224 @@
+﻿@model CrystalDataMT_SAHIL.Models.Party_MasterModel
+@using System.Web.Script;
+@{
+    ViewBag.Title = "Load";
+    Layout = null;
+}
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title></title>
+</head>
+<div>
+    @*@using(Html.BeginForm("",""))*@
+    <div id="create">
+        <h2>Invoice </h2>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <span id="lbl">Party</span>
+                        @*@Html.Label("Party","lbl")*@
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(Model => Model.Party_ID, ViewBag.PartyList as SelectList, "--SELECT PARTY--", new { @class = "Form-control1" })
+                    </td>
+                    <td>
+                        <span id="Label1">Invoice No</span>
+                    </td>
+                    <td>
+                        <input name="txtInvoice" type="text" id="txtInvoice">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span id="Label2">Invoice Date</span>
+                    </td>
+                    <td>
+                        <input name="txtInvDate" type="date" id="txtInvDate">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div>
+            <table cellspacing="0" rules="all" border="1" id="grdDetails" style="border-collapse:collapse;">
+                <tbody id="grdDetails_Row">
+                    <tr>
+                        <th scope="col">Sr No.</th>
+                        <th scope="col">ItemName</th>
+                        <th scope="col">Units</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Value</th>
+                    </tr>
+
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            @Html.DropDownListFor(Model => Model.ITEM_ID, ViewBag.ItemList as SelectList, "--SELECT ITEM--", new { @class = "Form-control" })
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(Model => Model.UOM_ID, ViewBag.UOMList as SelectList, "--SELECT UOM--", new { @class = "Form-control" })
+                        </td>
+                        <td>
+                            <input name="txtQty" type="text" id="grdDetails_txtQty_1" class="Form-control">
+                        </td>
+                        <td>
+                            <input name="txtRate" type="text" id="grdDetails_txtRate_1" class="Form-control">
+                        </td>
+                        <td>
+                            @*<span id="grdDetails_Value"></span>*@
+                            <input name="txtValue" type="text" id="grdDetails_Value_1" readonly="readonly" class="Form-control">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <span id="lblamount">Total Amount</span>
+        <input name="txtamount" type="text" readonly="readonly" id="txtamount">
+
+        <input type="submit" name="BtnSave" value="Submit" id="BtnSave">
+        <input type="submit" name="btnCancel" value="Cancel" id="btnCancel">
+    </div>
+</div>
+<script type="text/javascript">
+
+    ($(document).ready(function () {
+        var UOM = eval(@Html.Raw(ViewBag.UOMList1));
+        var ITEM = eval(@Html.Raw(ViewBag.ItemList1));
+            //alert(ITEM+'Hii');
+            console.log('https:// html.spec.whatwg.org/#named-access-on-the-window-object');
+            $('#grdDetails_txtRate_1').focusout(function () {
+                var Qty = parseFloat($('#grdDetails_txtQty_1').val());
+                var Rate = parseFloat($('#grdDetails_txtRate_1').val());
+                var value = Qty * Rate;
+                $('#grdDetails_Value_1').val(value);
+                $('#txtamount').val(value);
+
+                var idArr = [];
+                $(".Form-control").each(function () {
+                    idArr.push($(this).attr("id"));
+                });
+
+                var vartable = new Array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100);
+                var incr;
+                alert(idArr.join(", "));
+                alert(idArr.length);
+                alert(vartable.length);
+                var l1 = vartable.length;
+                var l2 = idArr.length;
+
+                for (var j = 0; j <= l1; j++) {
+                    if (l2 == vartable[j]) {
+                        l2 = l2 - 1;
+                        incr = idArr[l2];
+                        j = 20;
+                    };
+                };
+
+                //var incr = idArr[3];
+                var splitindex = incr.split('_')[2];
+                //alert(splitindex);
+
+                var i = splitindex;
+                alert(i++);
+                markup = "<tr><td>" + i + "</td>";
+                markup = markup + "<td><select id=ITEM_ID_" + i + " class =Form-control></select></td>";
+                markup = markup + "<td><select id=UOM_ID_" + i + " class =Form-control></select></td>";
+                markup = markup + "<td><input name=txtQty type=text id=grdDetails_txtQty_" + i + " class =Form-control></td>";
+                markup = markup + "<td><input name=txtRate type=text id=grdDetails_txtRate_" + i + " class =Form-control onfocusout=fun(this.id)></td>";
+                markup = markup + "<td><input name=txtValue type=text id=grdDetails_Value_" + i + " readonly=readonly class =Form-control></td>";
+                markup = markup + "</tr>";
+                tablebody = $('#grdDetails_Row');
+                tablebody.append(markup);
+                @*var view = '@ViewBag.ItemList';*@
+                $("#ITEM_ID_" + i + "").append('<option value="0"> --SELECT ITEM-- </option>');
+                $.each(ITEM,function () {
+
+                    $("#ITEM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
+                })
+                $("#UOM_ID_" + i + "").append('<option value="0"> --SELECT UOM-- </option>');
+                $.each(UOM, function () {
+
+                    $("#UOM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
+                })
+            });
+    }));
+
+    function fun(param) {
+        
+        
+        var UOM = eval(@Html.Raw(ViewBag.UOMList1));
+        var ITEM = eval(@Html.Raw(ViewBag.ItemList1));
+        var splitindex1 = param.split('_')[2];
+        var param1 = parseFloat($('#grdDetails_txtQty_' + splitindex1).val()) + 1;
+        if ($('#grdDetails_txtQty_' + param1).val() === "undefined") {
+            alert('Its Function');
+        } else {
+            alert('Else Function');
+        }
+        var Qty = parseFloat($('#grdDetails_txtQty_' + splitindex1).val());
+        var Rate = parseFloat($('#grdDetails_txtRate_' + splitindex1).val());
+        var value = Qty * Rate;
+        var total = parseFloat($('#txtamount').val());
+        total = total + value;
+        $('#grdDetails_Value_' + splitindex1).val(value);
+        $('#txtamount').val(total);
+
+        
+        var idArr = [];
+        $(".Form-control").each(function () {
+            idArr.push($(this).attr("id"));
+        });
+
+        var vartable = new Array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100);
+        var incr;
+        alert(idArr.join(", "));
+        alert(idArr.length);
+        alert(vartable.length);
+        var l1 = vartable.length;
+        var l2 = idArr.length;
+
+        for (var j = 0; j <= l1; j++) {
+            if (l2 == vartable[j]) {
+                l2 = l2 - 1;
+                incr = idArr[l2];
+                j = 20;
+            };
+        };
+
+        //var incr = idArr[3];
+        var splitindex = incr.split('_')[2];
+        //alert(splitindex);
+
+        var i = splitindex;
+        alert(i++);
+        markup = "<tr><td>" + i + "</td>";
+        markup = markup + "<td><select id=ITEM_ID_" + i + " class =Form-control></select></td>";
+        markup = markup + "<td><select id=UOM_ID_" + i + " class =Form-control></select></td>";
+        markup = markup + "<td><input name=txtQty type=text id=grdDetails_txtQty_" + i + " class =Form-control></td>";
+        markup = markup + "<td><input name=txtRate type=text id=grdDetails_txtRate_" + i + " class =Form-control onfocusout=fun(this.id)></td>";
+        markup = markup + "<td><input name=txtValue type=text id=grdDetails_Value_" + i + " readonly=readonly class =Form-control></td>";
+        markup = markup + "</tr>";
+        tablebody = $('#grdDetails_Row');
+        tablebody.append(markup);
+        @*var view = '@ViewBag.ItemList';*@
+        $("#ITEM_ID_" + i + "").append('<option selected="selected" value="0"> --SELECT ITEM-- </option>');
+        $.each(ITEM, function () {
+
+            $("#ITEM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
+        })
+        $("#UOM_ID_" + i + "").append('<option selected="selected" value="0"> --SELECT UOM-- </option>');
+        $.each(UOM, function () {
+
+            $("#UOM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
+        })
+    };
+
+
+</script>
+

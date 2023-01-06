@@ -1,0 +1,38 @@
+﻿
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "Home";
+}
+
+<h2>Home</h2>
+<div>
+    @Html.ActionLink("Add New", "AddInvoice", "AddInvoice")
+    @*<a href="@Url.Action("AddInvoice","AddInvoice")">Add</a>*@
+
+
+</div>
+<div style="column-gap:40px">
+    <table cellspacing="0" rules="all" border="1" id="grdDetails" style="border-collapse:collapse;">
+        <tr class="table table-striped">
+            <th>Sr NO</th>
+            <th>Invoice No</th>
+            <th>Invoice Date</th>
+            <th>Party Name</th>
+            <th>Invoice Value</th>
+            <th>User Name</th>
+        </tr>
+        @for (int i = 0; i < Model.Rows.Count; i++)
+        {
+            int j = i + 1;
+            <tr>
+                <td>@j</td>
+                <td>@Model.Rows[i][1]</td>
+                <td>@Model.Rows[i][2]</td>
+                <td>@Model.Rows[i][3]</td>
+                <td>@Model.Rows[i][4]</td>
+                <td>@Model.Rows[i][5]</td>
+            </tr>
+        }
+    </table>
+</div>
+

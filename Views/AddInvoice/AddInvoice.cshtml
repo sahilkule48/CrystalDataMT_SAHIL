@@ -1,0 +1,84 @@
+﻿@model CrystalDataMT_SAHIL.Models.Party_MasterModel
+@{
+    ViewBag.Title = "AddInvoice";
+}
+
+
+<div>
+    <div id="create">
+        <h2>Invoice </h2>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <span id="lbl">Party</span>
+                        @*@Html.Label("Party","lbl")*@
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(Model => Model.Party_ID, ViewBag.PartyList as SelectList, new { @class = "Form-control" })
+                    </td>
+                    <td>
+                        <span id="Label1">Invoice No</span>
+                    </td>
+                    <td>
+                        <input name="txtInvoice" type="text" id="txtInvoice">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span id="Label2">Invoice Date</span>
+                    </td>
+                    <td>
+                        <input name="txtInvDate" type="date" id="txtInvDate">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div>
+            <table cellspacing="0" rules="all" border="1" id="grdDetails" style="border-collapse:collapse;">
+                <tbody>
+                    <tr>
+                        <th scope="col">Sr No.</th>
+                        <th scope="col">ItemName</th>
+                        <th scope="col">Units</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <select name="grdDetails$ctl02$drpitem" onchange="javascript:setTimeout('__doPostBack(\'grdDetails$ctl02$drpitem\',\'\')', 0)" id="grdDetails_drpitem_0">
+                            </select>
+                        </td>
+                        <td>
+                            <select name="grdDetails$ctl02$lblunits" id="grdDetails_lblunits_0">
+                            </select>
+                        </td>
+                        <td>
+                            <input name="grdDetails$ctl02$txtQty" type="text" onchange="javascript:setTimeout('__doPostBack(\'grdDetails$ctl02$txtQty\',\'\')', 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="grdDetails_txtQty_0">
+                        </td>
+                        <td>
+                            <input name="grdDetails$ctl02$txtRate" type="text" onchange="javascript:setTimeout('__doPostBack(\'grdDetails$ctl02$txtRate\',\'\')', 0)" onkeypress="if (WebForm_TextBoxKeyHandler(event) == false) return false;" id="grdDetails_txtRate_0">
+                        </td>
+                        <td>
+                            <span id="grdDetails_lblValue_0"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <span id="lblamount">Total Amount</span>
+        <input name="txtamount" type="text" readonly="readonly" id="txtamount">
+
+        <input type="submit" name="BtnSave" value="Submit" id="BtnSave">
+        <input type="submit" name="btnCancel" value="Cancel" id="btnCancel">
+    </div>
+</div>
+
+
