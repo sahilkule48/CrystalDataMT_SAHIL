@@ -150,73 +150,93 @@
     }));
 
     function fun(param) {
-        
-        
+
+
         var UOM = eval(@Html.Raw(ViewBag.UOMList1));
         var ITEM = eval(@Html.Raw(ViewBag.ItemList1));
         var splitindex1 = param.split('_')[2];
-        var param1 = parseFloat($('#grdDetails_txtQty_' + splitindex1).val()) + 1;
-        if ($('#grdDetails_txtQty_' + param1).val() === "undefined") {
-            alert('Its Function');
+        var param1 = parseFloat(splitindex1)+1;
+        if ($('#grdDetails_txtQty_' + param1).val() == null && typeof ($('#grdDetails_txtRate_' + splitindex1).val()) != "undefined") {
+            var Qty = parseFloat($('#grdDetails_txtQty_' + splitindex1).val());
+            var Rate = parseFloat($('#grdDetails_txtRate_' + splitindex1).val());
+            var value = Qty * Rate;
+            var total = parseFloat($('#txtamount').val());
+            total = total + value;
+            $('#grdDetails_Value_' + splitindex1).val(value);
+            $('#txtamount').val(total);
+
+
+            var idArr = [];
+            $(".Form-control").each(function () {
+                idArr.push($(this).attr("id"));
+            });
+
+            var vartable = new Array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100);
+            var incr;
+            alert(idArr.join(", "));
+            alert(idArr.length);
+            alert(vartable.length);
+            var l1 = vartable.length;
+            var l2 = idArr.length;
+
+            for (var j = 0; j <= l1; j++) {
+                if (l2 == vartable[j]) {
+                    l2 = l2 - 1;
+                    incr = idArr[l2];
+                    j = 20;
+                };
+            };
+
+            //var incr = idArr[3];
+            var splitindex = incr.split('_')[2];
+            //alert(splitindex);
+
+            var i = splitindex;
+            alert(i++);
+            markup = "<tr><td>" + i + "</td>";
+            markup = markup + "<td><select id=ITEM_ID_" + i + " class =Form-control></select></td>";
+            markup = markup + "<td><select id=UOM_ID_" + i + " class =Form-control></select></td>";
+            markup = markup + "<td><input name=txtQty type=text id=grdDetails_txtQty_" + i + " class =Form-control></td>";
+            markup = markup + "<td><input name=txtRate type=text id=grdDetails_txtRate_" + i + " class =Form-control onfocusout=fun(this.id)></td>";
+            markup = markup + "<td><input name=txtValue type=text id=grdDetails_Value_" + i + " readonly=readonly class =Form-control></td>";
+            markup = markup + "</tr>";
+            tablebody = $('#grdDetails_Row');
+            tablebody.append(markup);
+            @*var view = '@ViewBag.ItemList';*@
+            $("#ITEM_ID_" + i + "").append('<option selected="selected" value="0"> --SELECT ITEM-- </option>');
+            $.each(ITEM, function () {
+
+                $("#ITEM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
+            })
+            $("#UOM_ID_" + i + "").append('<option selected="selected" value="0"> --SELECT UOM-- </option>');
+            $.each(UOM, function () {
+
+                $("#UOM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
+            })
+
         } else {
             alert('Else Function');
+            var isTrue = true;
+            splitindex1 = 1;
+            var total = 0;
+            while (isTrue) {
+                var Qty = parseFloat($('#grdDetails_txtQty_' + splitindex1).val());
+                var Rate = parseFloat($('#grdDetails_txtRate_' + splitindex1).val());
+                var value = Qty * Rate;
+                total = total + value;
+                
+                $('#grdDetails_Value_' + splitindex1).val(value);
+                
+                var splitindex2 = parseInt(splitindex1) + 1;
+                if ($('#grdDetails_Value_' + splitindex2).val() == "" || $('#grdDetails_Value_' + splitindex2).val() == null) {
+                    isTrue = false;
+                }
+                splitindex1 = parseInt(splitindex1) + 1;
+            }
+            $('#txtamount').val(total);
+
         }
-        var Qty = parseFloat($('#grdDetails_txtQty_' + splitindex1).val());
-        var Rate = parseFloat($('#grdDetails_txtRate_' + splitindex1).val());
-        var value = Qty * Rate;
-        var total = parseFloat($('#txtamount').val());
-        total = total + value;
-        $('#grdDetails_Value_' + splitindex1).val(value);
-        $('#txtamount').val(total);
 
-        
-        var idArr = [];
-        $(".Form-control").each(function () {
-            idArr.push($(this).attr("id"));
-        });
-
-        var vartable = new Array(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100);
-        var incr;
-        alert(idArr.join(", "));
-        alert(idArr.length);
-        alert(vartable.length);
-        var l1 = vartable.length;
-        var l2 = idArr.length;
-
-        for (var j = 0; j <= l1; j++) {
-            if (l2 == vartable[j]) {
-                l2 = l2 - 1;
-                incr = idArr[l2];
-                j = 20;
-            };
-        };
-
-        //var incr = idArr[3];
-        var splitindex = incr.split('_')[2];
-        //alert(splitindex);
-
-        var i = splitindex;
-        alert(i++);
-        markup = "<tr><td>" + i + "</td>";
-        markup = markup + "<td><select id=ITEM_ID_" + i + " class =Form-control></select></td>";
-        markup = markup + "<td><select id=UOM_ID_" + i + " class =Form-control></select></td>";
-        markup = markup + "<td><input name=txtQty type=text id=grdDetails_txtQty_" + i + " class =Form-control></td>";
-        markup = markup + "<td><input name=txtRate type=text id=grdDetails_txtRate_" + i + " class =Form-control onfocusout=fun(this.id)></td>";
-        markup = markup + "<td><input name=txtValue type=text id=grdDetails_Value_" + i + " readonly=readonly class =Form-control></td>";
-        markup = markup + "</tr>";
-        tablebody = $('#grdDetails_Row');
-        tablebody.append(markup);
-        @*var view = '@ViewBag.ItemList';*@
-        $("#ITEM_ID_" + i + "").append('<option selected="selected" value="0"> --SELECT ITEM-- </option>');
-        $.each(ITEM, function () {
-
-            $("#ITEM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
-        })
-        $("#UOM_ID_" + i + "").append('<option selected="selected" value="0"> --SELECT UOM-- </option>');
-        $.each(UOM, function () {
-
-            $("#UOM_ID_" + i + "").append($('<option></option>').val(this['Value']).html(this['Text']));
-        })
     };
 
 
